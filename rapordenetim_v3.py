@@ -83,12 +83,24 @@ def drive_yukle(dosya_yolu):
         file_metadata = {'name': os.path.basename(dosya_yolu)}
         if DRIVE_KLASOR_ID:
             file_metadata['parents'] = [DRIVE_KLASOR_ID]
+            
         media = MediaFileUpload(dosya_yolu, mimetype='application/vnd.openxmlformats-officedocument.wordprocessingml.document')
         file = service.files().create(body=file_metadata, media_body=media, fields='id, webViewLink').execute()
+        
+        file_id = file.get('id')
+        permission = {
+            'type': 'anyone',
+            'role': 'reader',
+        }
+        service.permissions().create(
+            fileId=file_id,
+            body=permission,
+            fields='id',
+        ).execute()
+
         return file.get('webViewLink')
     except Exception:
         return None
-
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     butonlar = [[
         InlineKeyboardButton("Yeni Rapor Ekle", callback_data='yeni_rapor'),
@@ -299,5 +311,6 @@ if __name__ == '__main__':
     
     print("Bot calisiyor...")
     uygulama.run_polling()
+
 
 
