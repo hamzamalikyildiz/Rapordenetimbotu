@@ -126,7 +126,7 @@ async def butona_tiklandi(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await tiklama.answer()
     
     if tiklama.data == 'yeni_rapor':
-        await tiklama.edit_message_text(text="Önce tarihi ayarlayalım. Rapor hangi tarihleri kapsıyor? (Orn: 20-27 Kasim)")
+        await tiklama.edit_message_text(text="Önce tarihi ayarlayalım. Rapor hangi tarihleri kapsıyor? (Orn: 20-27 Kasım 2025)")
         return TARIH_ADIMI
     elif tiklama.data == 'iptal_et':
         await tiklama.edit_message_text(text="İşlem iptal edildi.")
@@ -299,4 +299,5 @@ if __name__ == '__main__':
     
     print("Bot calisiyor...")
     uygulama.run_polling()
+
 
