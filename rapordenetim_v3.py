@@ -133,8 +133,9 @@ async def tamamlanan_gorevler_al(update: Update, context: ContextTypes.DEFAULT_T
 
 async def devam_eden_gorevler_al(update: Update, context: ContextTypes.DEFAULT_TYPE):
     context.user_data['devam_eden_gorevler'] = update.message.text
-    await update.message.reply_text("4. Karsilastigin SORUNLAR veya engeller var mi?")
-    return DEVAM_EDEN_GOREVLER_ADIMI
+    await update.message.reply_text("4. Karşılaştığın SORUNLAR veya engeller var mı?")
+    return SORUNLAR_ADIMI
+
 
 async def sorunlar_al(update: Update, context: ContextTypes.DEFAULT_TYPE):
     context.user_data['sorunlar'] = update.message.text
@@ -281,4 +282,5 @@ if __name__ == '__main__':
     uygulama.add_handler(sohbet_yoneticisi)
     
     print("Bot calisiyor...")
+
     uygulama.run_polling()
