@@ -126,10 +126,10 @@ async def butona_tiklandi(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await tiklama.answer()
     
     if tiklama.data == 'yeni_rapor':
-        await tiklama.edit_message_text(text="Once tarihi ayarlayalim. Rapor hangi tarihleri kapsiyor? (Orn: 20-27 Kasim)")
+        await tiklama.edit_message_text(text="Önce tarihi ayarlayalım. Rapor hangi tarihleri kapsıyor? (Orn: 20-27 Kasim)")
         return TARIH_ADIMI
     elif tiklama.data == 'iptal_et':
-        await tiklama.edit_message_text(text="Islem iptal edildi.")
+        await tiklama.edit_message_text(text="İşlem iptal edildi.")
         return ConversationHandler.END
 
 async def tarih_al(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -139,32 +139,32 @@ async def tarih_al(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def projeler_al(update: Update, context: ContextTypes.DEFAULT_TYPE):
     context.user_data['projeler'] = update.message.text
-    await update.message.reply_text("2. TAMAMLANAN gorevlerin neler?")
+    await update.message.reply_text("2. TAMAMLANAN görevlerin neler?")
     return TAMAMLANAN_GOREVLER_ADIMI
 
 async def tamamlanan_gorevler_al(update: Update, context: ContextTypes.DEFAULT_TYPE):
     context.user_data['tamamlanan_gorevler'] = update.message.text
-    await update.message.reply_text("3. Su an DEVAM EDEN isler neler?")
+    await update.message.reply_text("3. Şu an DEVAM EDEN işler neler?")
     return DEVAM_EDEN_GOREVLER_ADIMI
 
 async def devam_eden_gorevler_al(update: Update, context: ContextTypes.DEFAULT_TYPE):
     context.user_data['devam_eden_gorevler'] = update.message.text
-    await update.message.reply_text("4. Karsilastigin SORUNLAR veya engeller var mi?")
-    return DEVAM_EDEN_GOREVLER_ADIMI
+    await update.message.reply_text("4. Karşılaştığın SORUNLAR veya engeller var mı?")
+    return SORUNLAR_ADIMI
 
 async def sorunlar_al(update: Update, context: ContextTypes.DEFAULT_TYPE):
     context.user_data['sorunlar'] = update.message.text
-    await update.message.reply_text("5. GELECEK HAFTA icin planlarin neler?")
+    await update.message.reply_text("5. GELECEK HAFTA için planların neler?")
     return GELECEK_PLANLAR_ADIMI
 
 async def gelecek_planlar_al(update: Update, context: ContextTypes.DEFAULT_TYPE):
     context.user_data['gelecek_planlar'] = update.message.text
-    await update.message.reply_text("6. Eklemek istedigin NOTLAR var mi? (Yoksa 'Yok' yazabilirsin)")
+    await update.message.reply_text("6. Eklemek istediğin NOTLAR var mi? (Yoksa 'Yok' yazabilirsin)")
     return EK_NOTLAR_ADIMI
 
 async def ek_notlar_al(update: Update, context: ContextTypes.DEFAULT_TYPE):
     context.user_data['ek_notlar'] = update.message.text
-    await update.message.reply_text("Veriler alindi. AI her basligi tek tek duzenliyor, rapor hazirlaniyor...")
+    await update.message.reply_text("Veriler alindi. AI her basligi tek tek düzenliyor, rapor hazırlanıyor...")
 
     veri = context.user_data
     kullanici_adi = update.effective_user.first_name.replace(" ", "_")
@@ -299,3 +299,4 @@ if __name__ == '__main__':
     
     print("Bot calisiyor...")
     uygulama.run_polling()
+
