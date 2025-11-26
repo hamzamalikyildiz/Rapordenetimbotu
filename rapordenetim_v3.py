@@ -70,7 +70,6 @@ def drive_yukle(dosya_yolu):
         else:
             if not os.path.exists('credentials.json'):
                 return None
-            
             try:
                 flow = InstalledAppFlow.from_client_secrets_file('credentials.json', SCOPES)
                 creds = flow.run_local_server(port=0)
@@ -84,11 +83,9 @@ def drive_yukle(dosya_yolu):
         file_metadata = {'name': os.path.basename(dosya_yolu)}
         if DRIVE_KLASOR_ID:
             file_metadata['parents'] = [DRIVE_KLASOR_ID]
-            
         media = MediaFileUpload(dosya_yolu, mimetype='application/vnd.openxmlformats-officedocument.wordprocessingml.document')
         file = service.files().create(body=file_metadata, media_body=media, fields='id, webViewLink').execute()
         return file.get('webViewLink')
-        
     except Exception:
         return None
 
@@ -98,19 +95,38 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         InlineKeyboardButton("Iptal et", callback_data="iptal_et")
     ]]
     panel = InlineKeyboardMarkup(butonlar)
-    
     await context.bot.send_message(
         chat_id=update.effective_chat.id, 
-        text="Merhaba. Haftalik rapor olusturucuya hos geldin. Ne yapmak istersiniz?", 
+        text="Merhaba. Haftalik rapor olusturucuya hos geldin. Ne yapmak istersiniz?\nYardim icin: /yardim", 
         reply_markup=panel
     )
+
+async def yardim(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    mesaj = """
+RAPOR BOTU KULLANIM KILAVUZU
+
+Bu bot, haftalik raporlarini hizlica olusturup Google Drive'a yuklemeni saglar.
+
+KOMUTLAR:
+/start - Ana menuyu acar ve botu baslatir.
+/yardim - Bu menuyu gosterir.
+/iptal - Rapor olusturma surecini iptal eder.
+
+NASIL KULLANILIR?
+1. /start yazarak menuyu ac.
+2. 'Yeni Rapor Ekle' butonuna tikla.
+3. Tarih araligini gir (Orn: 20-27 Kasim).
+4. Botun sorularina cevap ver.
+5. Bot, cevaplarini yapay zeka ile duzenleyip rapor haline getirir ve Drive linkini sana verir.
+    """
+    await context.bot.send_message(chat_id=update.effective_chat.id, text=mesaj)
 
 async def butona_tiklandi(update: Update, context: ContextTypes.DEFAULT_TYPE):
     tiklama = update.callback_query
     await tiklama.answer()
     
     if tiklama.data == 'yeni_rapor':
-        await tiklama.edit_message_text(text="Once tarihi ayarlayalim. Rapor hangi tarihleri kapsiyor?")
+        await tiklama.edit_message_text(text="Once tarihi ayarlayalim. Rapor hangi tarihleri kapsiyor? (Orn: 20-27 Kasim)")
         return TARIH_ADIMI
     elif tiklama.data == 'iptal_et':
         await tiklama.edit_message_text(text="Islem iptal edildi.")
@@ -133,9 +149,8 @@ async def tamamlanan_gorevler_al(update: Update, context: ContextTypes.DEFAULT_T
 
 async def devam_eden_gorevler_al(update: Update, context: ContextTypes.DEFAULT_TYPE):
     context.user_data['devam_eden_gorevler'] = update.message.text
-    await update.message.reply_text("4. Karşılaştığın SORUNLAR veya engeller var mı?")
-    return SORUNLAR_ADIMI
-
+    await update.message.reply_text("4. Karsilastigin SORUNLAR veya engeller var mi?")
+    return DEVAM_EDEN_GOREVLER_ADIMI
 
 async def sorunlar_al(update: Update, context: ContextTypes.DEFAULT_TYPE):
     context.user_data['sorunlar'] = update.message.text
@@ -144,12 +159,12 @@ async def sorunlar_al(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def gelecek_planlar_al(update: Update, context: ContextTypes.DEFAULT_TYPE):
     context.user_data['gelecek_planlar'] = update.message.text
-    await update.message.reply_text("6. Eklemek istedigin NOTLAR var mi?")
+    await update.message.reply_text("6. Eklemek istedigin NOTLAR var mi? (Yoksa 'Yok' yazabilirsin)")
     return EK_NOTLAR_ADIMI
 
 async def ek_notlar_al(update: Update, context: ContextTypes.DEFAULT_TYPE):
     context.user_data['ek_notlar'] = update.message.text
-    await update.message.reply_text("Veriler alindi. AI raporunu duzenliyor ve dosya hazirlaniyor.")
+    await update.message.reply_text("Veriler alindi. AI her basligi tek tek duzenliyor, rapor hazirlaniyor...")
 
     veri = context.user_data
     kullanici_adi = update.effective_user.first_name.replace(" ", "_")
@@ -279,8 +294,8 @@ if __name__ == '__main__':
     )
     
     uygulama.add_handler(CommandHandler('start', start))
+    uygulama.add_handler(CommandHandler('yardim', yardim))
     uygulama.add_handler(sohbet_yoneticisi)
     
     print("Bot calisiyor...")
-
     uygulama.run_polling()
