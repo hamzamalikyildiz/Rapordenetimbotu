@@ -22,13 +22,13 @@ if not os.path.exists('token.json'):
         with open('token.json', 'w') as f:
             f.write(os.environ['TOKEN_JSON'])
 
-TELEGRAM_TOKEN = os.environ.get('TELEGRAM_TOKEN', "8034942082:AAER34bDTUszcntdE6ncavK1xohRJ4bNIcE")
-GOOGLE_API_KEY = os.environ.get('GOOGLE_API_KEY', "AIzaSyDWTC1ScC7mfkz3tD3Qmyl6LFNdVIo9VnM")
+TELEGRAM_TOKEN = os.environ.get('TELEGRAM_TOKEN', "token")
+GOOGLE_API_KEY = os.environ.get('GOOGLE_API_KEY', "key")
 DRIVE_KLASOR_ID = "10X9Qd9o1vTR2IJ3ZuhjPBS2U4JacKjr6"
 SCOPES = ['https://www.googleapis.com/auth/drive']
 
 genai.configure(api_key=GOOGLE_API_KEY)
-model = genai.GenerativeModel('gemini-2.0-flash')
+model = genai.GenerativeModel('gemini-2.5-flash')
 
 TARIH_ADIMI, PROJELER_ADIMI, TAMAMLANAN_GOREVLER_ADIMI, DEVAM_EDEN_GOREVLER_ADIMI, SORUNLAR_ADIMI, GELECEK_PLANLAR_ADIMI, EK_NOTLAR_ADIMI = range(7)
 
@@ -311,6 +311,7 @@ if __name__ == '__main__':
     
     print("Bot calisiyor...")
     uygulama.run_polling()
+
 
 
 
