@@ -1,0 +1,19 @@
+# Ortam değişkenleri - ASLA commit etme!
+.env
+
+# Google OAuth kimlik bilgileri - ASLA commit etme!
+credentials.json
+token.json
+
+# Veritabanı
+*.db
+
+# Derleme çıktıları
+*.exe
+*.o
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
